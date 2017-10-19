@@ -1,0 +1,12 @@
+[[constraint]]
+  name = "gopkg.in/go-playground/webhooks.v3"
+  branch = "multiple-webhook"
+  source = "github.com/kairen/webhooks"
+
+[[constraint]]
+  name = "github.com/xanzy/go-gitlab"
+  version = "0.6.2"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/google/go-github"
