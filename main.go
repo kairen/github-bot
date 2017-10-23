@@ -1,21 +1,21 @@
 package main
 
 import (
-	"bot/hanlder"
 	"errors"
 	"flag"
 	"fmt"
+	"github-bot/pkg/webhook"
 	"os"
 )
 
 var (
 	// Error message define
-	errRequired = errors.New("[ERROR] Missing required tokens")
+	errRequired = errors.New("[ERROR] Missing required opts")
 
 	// GitHub and GitLab opts
 	githubToken    = flag.String("github-token", "", "GitHub access token.")
 	gitlabToken    = flag.String("gitlab-token", "", "GitLab access token.")
-	gitlabEndpoint = flag.String("gitlab-endpoint", "https://gitlab.com/api/v4", "GitLab API Endpoint.")
+	gitlabEndpoint = flag.String("gitlab-endpoint", "https://gitlab.com", "GitLab API Endpoint.")
 
 	// Webhook server opts
 	webhookPort   = flag.Int("port", 8080, "Webhook server port.")
@@ -24,8 +24,8 @@ var (
 )
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "Usage: bot [OPTION]...\n")
-	fmt.Fprintf(os.Stderr, "bot watch your GitHub and GitLab event to handle anything!!\n\n")
+	fmt.Fprintf(os.Stderr, "Usage: github-bot [OPTION]...\n")
+	fmt.Fprintf(os.Stderr, "github-bot watch your GitHub and GitLab event to handle anything!!\n\n")
 	fmt.Fprintf(os.Stderr, "Options:\n")
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr)
@@ -48,10 +48,10 @@ func main() {
 	}
 
 	// Init GitHub and GitLab account
-	c := hanlder.NewAccount(*githubToken, *gitlabToken, *gitlabEndpoint)
+	c := webhook.NewAccount(*githubToken, *gitlabToken, *gitlabEndpoint)
 	c.InitAccount()
 
 	// Start webhook server
-	s := hanlder.NewServer(*webhookPort, *webhookSecret, *webhookPath)
+	s := webhook.NewServer(*webhookPort, *webhookSecret, *webhookPath)
 	s.RunServer()
 }
