@@ -56,6 +56,20 @@ type GitHubStatus struct {
 	Description string
 }
 
+// CheckStatus check github status
+func (gs *GitHubStatus) CheckStatus() {
+	switch gs.State {
+	case "success":
+		gs.State = "success"
+	case "failed":
+		gs.State = "failure"
+	case "canceled":
+		gs.State = "error"
+	default:
+		gs.State = "pending"
+	}
+}
+
 // CreateGitHubStatus create a status
 func CreateGitHubStatus(owner string, repo string, sha string, stat *GitHubStatus) {
 	status := &github.RepoStatus{

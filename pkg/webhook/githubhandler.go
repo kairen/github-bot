@@ -23,8 +23,8 @@ func GitHubIssueCommentHandler(payload interface{}, header webhooks.Header) {
 				remoteURL := "git@gitlab.com:" + pl.Repository.FullName + ".git"
 				utils.GitClone(pl.Repository.CloneURL, path)
 				utils.GitAddRemote(path, "gitlab", remoteURL)
-				utils.GitFetch(path, "origin", 2)
-				utils.GitPushAndDelete(path, "gitlab", 2)
+				utils.GitFetch(path, "origin", pl.Issue.Number)
+				utils.GitPushAndDelete(path, "gitlab", pl.Issue.Number)
 			}
 		default:
 			log.Print("Other Event trigger")
