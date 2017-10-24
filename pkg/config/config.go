@@ -24,7 +24,8 @@ type Project struct {
 type ProjectList []Project
 
 const (
-	jobPath = "./jobs.json"
+	jobPath    = "/var/lib/github-bot/jobs.json"
+	jobPathKey = "JOB_FILEPATH"
 	// StateDefault is state default value
 	StateDefault = "created"
 )
@@ -55,9 +56,9 @@ func (p *Project) AddJob(id int64) {
 }
 
 // RemoveJob remote a old job
-func (p *Project) RemoveJob(j Job) bool {
+func (p *Project) RemoveJob(id int64) bool {
 	for i := range p.Jobs {
-		if p.Jobs[i].ID == j.ID {
+		if p.Jobs[i].ID == id {
 			p.Jobs = p.Jobs[:i+copy(p.Jobs[i:], p.Jobs[i+1:])]
 			return true
 		}
@@ -105,7 +106,11 @@ func LoadJobJSON() ProjectList {
 
 // SaveJobAsJSON save state to json file
 func SaveJobAsJSON(v interface{}) {
-	fo, err := os.Create(jobPath)
+	path := os.Getenv(jobPathKey)
+	if path == "" {
+		path = jobPath
+	}
+	fo, err := os.Create(path)
 	if err != nil {
 		log.Fatal(err)
 	}
