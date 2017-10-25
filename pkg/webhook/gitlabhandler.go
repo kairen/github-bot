@@ -17,7 +17,7 @@ func GitLabPipelineHandler(payload interface{}, header webhooks.Header) {
 		State:       pepelineStatus,
 		Context:     "gitlab-ci/pipeline",
 		Description: "Pipeline " + pepelineStatus,
-		TargetURL:   pl.Project.WebURL + "/" + id,
+		TargetURL:   pl.Project.WebURL + "/pipelines/" + id,
 	}
 	status.CheckStatus()
 
