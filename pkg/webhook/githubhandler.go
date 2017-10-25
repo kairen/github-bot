@@ -34,20 +34,10 @@ func GitHubIssueCommentHandler(payload interface{}, header webhooks.Header) {
 // GitHubPullRequestHandler handles github pull request events
 func GitHubPullRequestHandler(payload interface{}, header webhooks.Header) {
 	pl := payload.(github.PullRequestPayload)
-	conf := config.LoadJobJSON().NewProject(pl.Repository.Name)
-	project := conf.GetProject(pl.Repository.Name)
-
 	switch pl.Action {
 	case "opened", "edited":
-		project.AddJob(pl.PullRequest.Number)
-		job := project.GetJob(pl.PullRequest.Number)
-		job.HeadSha = pl.PullRequest.Head.Sha
 	case "closed":
-		if pl.PullRequest.Merged {
-			project.RemoveJob(pl.PullRequest.Number)
-		}
 	}
-	config.SaveJobAsJSON(conf)
 }
 
 // Check sender is owner

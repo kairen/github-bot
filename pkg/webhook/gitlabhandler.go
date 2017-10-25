@@ -2,9 +2,6 @@ package webhook
 
 import (
 	"github-bot/pkg/api"
-	"github-bot/pkg/config"
-	"strconv"
-	"strings"
 
 	webhooks "gopkg.in/go-playground/webhooks.v3"
 	"gopkg.in/go-playground/webhooks.v3/gitlab"
@@ -13,26 +10,20 @@ import (
 // GitLabPipelineHandler handles gitlab pipeline events
 func GitLabPipelineHandler(payload interface{}, header webhooks.Header) {
 	pl := payload.(gitlab.PipelineEventPayload)
-	state := pl.ObjectAttributes.Status
-	refs := strings.Split(pl.ObjectAttributes.Ref, "-")
-	id, _ := strconv.ParseInt(refs[len(refs)-1], 10, 64)
+	pepelineStatus := pl.ObjectAttributes.Status
 
-	conf := config.LoadJobJSON().NewProject(pl.Project.Name)
-	job := conf.GetProject(pl.Project.Name).GetJob(id)
-	job.State = state
-
-	stat := &api.GitHubStatus{
-		State:       state,
+	status := &api.GitHubStatus{
+		State:       pepelineStatus,
 		Context:     "gitlab-ci/pipeline",
-		Description: "Pipeline " + state,
-		TargetURL:   pl.Project.WebURL + "/pipelines",
+		Description: "Pipeline " + pepelineStatus,
+		TargetURL:   pl.Project.WebURL + "/" + string(pl.ObjectAttributes.ID),
 	}
-	stat.CheckStatus()
-	config.SaveJobAsJSON(conf)
+	status.CheckStatus()
+
 	api.CreateGitHubStatus(
 		pl.Project.Namespace,
 		pl.Project.Name,
-		job.HeadSha,
-		stat,
+		pl.ObjectAttributes.SHA,
+		status,
 	)
 }
