@@ -2,6 +2,7 @@ package webhook
 
 import (
 	"github-bot/pkg/api"
+	"strconv"
 
 	webhooks "gopkg.in/go-playground/webhooks.v3"
 	"gopkg.in/go-playground/webhooks.v3/gitlab"
@@ -11,12 +12,12 @@ import (
 func GitLabPipelineHandler(payload interface{}, header webhooks.Header) {
 	pl := payload.(gitlab.PipelineEventPayload)
 	pepelineStatus := pl.ObjectAttributes.Status
-
+	id := strconv.FormatInt(pl.ObjectAttributes.ID, 10)
 	status := &api.GitHubStatus{
 		State:       pepelineStatus,
 		Context:     "gitlab-ci/pipeline",
 		Description: "Pipeline " + pepelineStatus,
-		TargetURL:   pl.Project.WebURL + "/" + string(pl.ObjectAttributes.ID),
+		TargetURL:   pl.Project.WebURL + "/" + id,
 	}
 	status.CheckStatus()
 
