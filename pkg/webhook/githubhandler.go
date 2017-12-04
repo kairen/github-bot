@@ -1,11 +1,12 @@
 package webhook
 
 import (
-	"github-bot/pkg/api"
-	"github-bot/pkg/config"
-	"github-bot/pkg/utils"
 	"log"
 	"strings"
+
+	"github.com/kairen/github-bot/pkg/api"
+	"github.com/kairen/github-bot/pkg/config"
+	"github.com/kairen/github-bot/pkg/utils"
 
 	webhooks "gopkg.in/go-playground/webhooks.v3"
 	"gopkg.in/go-playground/webhooks.v3/github"

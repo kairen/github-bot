@@ -1,8 +1,9 @@
 package webhook
 
 import (
-	"github-bot/pkg/api"
 	"strconv"
+
+	"github.com/kairen/github-bot/pkg/api"
 
 	webhooks "gopkg.in/go-playground/webhooks.v3"
 	"gopkg.in/go-playground/webhooks.v3/gitlab"

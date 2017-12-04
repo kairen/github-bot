@@ -4,9 +4,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github-bot/pkg/config"
-	"github-bot/pkg/webhook"
 	"os"
+
+	"github.com/kairen/github-bot/pkg/config"
+	"github.com/kairen/github-bot/pkg/webhook"
 )
 
 var (
